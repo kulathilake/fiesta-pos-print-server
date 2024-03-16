@@ -1,0 +1,26 @@
+name: Build and Package
+
+on:
+  push:
+    branches:
+      - main  # Adjust as per your main branch name
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Executable
+        run: npm run build  # Add your build script here
+
+      - name: Upload Executable Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: pos-print-server
+          path: ./dist/bundle.zip  # Adjust the path to your executable

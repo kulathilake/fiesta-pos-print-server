@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack "
+    "build": "webpack --mode production",
+    "dev": "nodemon src"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +18,18 @@
     "express": "^4.18.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.24.0",
+    "@babel/preset-env": "^7.24.0",
+    "babel-loader": "^9.1.3",
+    "copy-webpack-plugin": "^12.0.2",
+    "node-loader": "^2.0.0",
+    "nodemon": "^3.1.0",
     "webpack": "^5.90.3",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "zip-webpack-plugin": "^4.0.1"
+  },
+  "pkg": {
+    "scripts": "build/**/*.js",
+    "outputPath": "dist"
   }
 }

@@ -64,8 +64,10 @@ app.post("/print/kot", (req, res) => {
   );
   res.send("OK");
 });
-app.get("/printer/", (req, res) => {
+app.get("/health", (req, res) => {
   res.send(printerInfo());
 });
 
-app.listen(9000);
+app.listen(9000,()=>{
+  console.log("print server running")
+});
