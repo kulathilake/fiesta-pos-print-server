@@ -3,7 +3,7 @@ name: Build and Package
 on:
   push:
     branches:
-        - "master"
+      - "master"
     tags:
       - "v*" # Trigger only for tags starting with 'v'
 
@@ -27,8 +27,5 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: dist/bundle.zip
-          tag_name: ${{ github.ref }}
-          name: Release ${{ github.ref }}
-          body: Release ${{ github.ref }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}            
