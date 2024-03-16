@@ -127,6 +127,7 @@ module.exports.printerInfo = function getPrinterInfo() {
   try {
     return init();
   } catch (error) {
+    console.log(error)
     return error.message;
   }
 };
