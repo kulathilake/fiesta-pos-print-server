@@ -24,7 +24,7 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          files: dist/my-app-${{github.ref }}.zip
+          files: dist/bundle.zip
           tag_name: ${{ github.ref }}
           name: Release ${{ github.ref }}
           body: Release ${{ github.ref }}
