@@ -2,6 +2,8 @@ name: Build and Package
 
 on:
   push:
+    branches:
+        - "main"
     tags:
       - "v*" # Trigger only for tags starting with 'v'
 
