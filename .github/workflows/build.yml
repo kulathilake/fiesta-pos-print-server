@@ -2,8 +2,8 @@ name: Build and Package
 
 on:
   push:
-    branches:
-      - main  # Adjust as per your main branch name
+    tags:
+      - "v*" # Trigger only for tags starting with 'v'
 
 jobs:
   build:
@@ -17,10 +17,10 @@ jobs:
         run: npm install
 
       - name: Build Executable
-        run: npm run build  # Add your build script here
+        run: npm run build # Add your build script here
 
       - name: Upload Executable Artifact
         uses: actions/upload-artifact@v2
         with:
           name: pos-print-server
-          path: ./dist/bundle.zip  # Adjust the path to your executable
+          path: ./dist/bundle.zip # Adjust the path to your executable
