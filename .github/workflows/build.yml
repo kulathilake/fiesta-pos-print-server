@@ -8,9 +8,11 @@ on:
       - "v*" # Trigger only for tags starting with 'v'
 
 jobs:
+    
   build:
     runs-on: ubuntu-latest
-
+    permissions:
+        contents: write
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -29,4 +31,4 @@ jobs:
           name: Release ${{ github.ref }}
           body: Release ${{ github.ref }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}            
