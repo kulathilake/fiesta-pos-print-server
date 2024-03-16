@@ -18,9 +18,24 @@ jobs:
 
       - name: Build Executable
         run: npm run build # Add your build script here
-
-      - name: Upload Executable Artifact
-        uses: actions/upload-artifact@v2
+        
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: pos-print-server
-          path: ./dist/bundle.zip # Adjust the path to your executable
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/my-app.zip  # Adjust the path to your zip file
+          asset_name: my-app.zip  # Adjust the name of the asset
+          asset_content_type: application/zip
