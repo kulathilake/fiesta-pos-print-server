@@ -79,13 +79,12 @@ module.exports.printBill = function printBill(
           .drawLine()
           .text("Fiesta Urban Cuisine")
           .text("Negombo Road Kurunegala")
-          .text("0773121022");
+          .text("0772008505");
         printer.feed(2).cut(true).close();
       });
     });
   } catch (error) {
-    console.log(error)
-   console.log("Error") 
+    throw error;
   }
 };
 

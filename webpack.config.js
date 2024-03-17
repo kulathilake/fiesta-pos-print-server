@@ -1,7 +1,7 @@
 const path = require('path');
 const exec = require('child_process').exec;
 const AdmZip = require('adm-zip');
-const ZipPlugin = require('zip-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
 /**
  * @type {import("webpack").Configuration}
  */
@@ -13,7 +13,7 @@ module.exports = {
     filename: 'bundle.js', // Output bundle file
   },
   externals: {
-    'escpos-usb': 'commonjs escpos-usb',// exclude 'escpos-usb' from bundling,
+    './escpos-usb': 'commonjs escpos-usb',// exclude 'escpos-usb' from bundling,
   },
   stats: {
     errorDetails:true
@@ -25,12 +25,12 @@ module.exports = {
        */
       apply: compiler => {
         compiler.hooks.afterEmit.tapAsync("Install USB",(compilation,callback)=>{
-          exec("npm init -y && npm i usb",{cwd: path.resolve(__dirname,'build')},(err)=>{
+          exec("npm init -y && npm i usb escpos-usb",{cwd: path.resolve(__dirname,'build')},(err)=>{
             if(err){
               console.log(err);
               return;
             }
-            console.log("zipping",)
+            console.log("zipping")
             const zip = new AdmZip();
             zip.addLocalFolder(path.resolve(__dirname,"build"));
             zip.writeZip(path.resolve(__dirname,"dist","bundle.zip"));
@@ -38,6 +38,11 @@ module.exports = {
           })
         })
       }
-    }
+    },
+    new CopyPlugin({
+      patterns: [
+        {from: 'src/escpos-usb.js', to:"node_modules/escpos-usb/index.js"}
+      ]
+    })
   ],
 };
