@@ -24,8 +24,8 @@ module.exports = {
        * @param {import("webpack").Compiler} compiler 
        */
       apply: compiler => {
-        compiler.hooks.afterEmit.tapAsync("Install escpos-usb",(compilation,callback)=>{
-          exec("npm init -y && npm i escpos-usb escpos",{cwd: path.resolve(__dirname,'build')},(err)=>{
+        compiler.hooks.afterEmit.tapAsync("Install USB",(compilation,callback)=>{
+          exec("npm init -y && npm i usb",{cwd: path.resolve(__dirname,'build')},(err)=>{
             if(err){
               console.log(err);
               return;
