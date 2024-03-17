@@ -25,8 +25,7 @@ module.exports = {
        */
       apply: compiler => {
         compiler.hooks.afterEmit.tapAsync("Install escpos-usb",(compilation,callback)=>{
-          console.log("packaging escpos-usb")
-          exec("npm init -y && npm i escpos-usb",{cwd: path.resolve(__dirname,'build')},(err)=>{
+          exec("npm init -y && npm i escpos-usb escpos",{cwd: path.resolve(__dirname,'build')},(err)=>{
             if(err){
               console.log(err);
               return;

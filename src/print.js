@@ -1,6 +1,6 @@
 const escpos = require("escpos");
 // install escpos-usb adapter module manually
-escpos.USB = require("escpos-usb");
+escpos.USB = require("./escpos-usb");  
 const path = require("path");
 const { formatNumberToCurrency } = require("./currency.util");
 
@@ -22,66 +22,71 @@ module.exports.printBill = function printBill(
   balance,
   customerCopy = false
 ) {
-  const { device, printer } = init();
-  escpos.Image.load(path.join(__dirname, "fiesta.png"), (image, error) => {
-    device.open(async function (error) {
-      await printer
-        .font("B")
-        .align("ct")
-        .style("NORMAL")
-        .size(1, 1)
-        .image(image, "D24");
-      if (customerCopy) {
-        printer.text("Customer Copy");
-      }
-      printer
-        .text("Fiesta Urban Cuisine")
-        .size(0.5, 0.5)
-        .drawLine()
-        .style("B")
-        .text(date)
-        .text(`#${invoiceId}`)
-        .size(0.5, 0.5)
-        .font("A");
-      items.forEach(({ qty, item }) => {
-        printer.tableCustom(
-          [
-            { text: item.name, align: "LEFT", width: 0.5 },
-            { text: qty, align: "LEFT", width: 0.1 },
-            {
-              text: formatNumberToCurrency(item.price),
-              align: "RIGHT",
-              width: 0.2,
-            },
-            {
-              text: formatNumberToCurrency(item.price * qty),
-              align: "RIGHT",
-              width: 0.2,
-            },
-          ],
-          { encoding: "cp857", size: [1, 1] }
-        );
+  try {
+    const { device, printer } = init();
+    escpos.Image.load(path.join(__dirname, "fiesta.png"), (image, error) => {
+      device.open(async function (error) {
+        await printer
+          .font("B")
+          .align("ct")
+          .style("NORMAL")
+          .size(1, 1)
+          .image(image, "D24");
+        if (customerCopy) {
+          printer.text("Customer Copy");
+        }
+        printer
+          .text("Fiesta Urban Cuisine")
+          .size(0.5, 0.5)
+          .drawLine()
+          .style("B")
+          .text(date)
+          .text(`#${invoiceId}`)
+          .size(0.5, 0.5)
+          .font("A");
+        items.forEach(({ qty, item }) => {
+          printer.tableCustom(
+            [
+              { text: item.name, align: "LEFT", width: 0.5 },
+              { text: qty, align: "LEFT", width: 0.1 },
+              {
+                text: formatNumberToCurrency(item.price),
+                align: "RIGHT",
+                width: 0.2,
+              },
+              {
+                text: formatNumberToCurrency(item.price * qty),
+                align: "RIGHT",
+                width: 0.2,
+              },
+            ],
+            { encoding: "cp857", size: [1, 1] }
+          );
+        });
+        printer
+          .feed(2)
+          .style("B")
+          .size(1, 1)
+          .text(`TOTAL: ${formatNumberToCurrency(total)}`);
+        if (tendered) {
+          printer.text(`Tendered: ${formatNumberToCurrency(tendered)}`);
+        }
+        if (balance) {
+          printer.text(`TOTAL: ${formatNumberToCurrency(balance)}`);
+        }
+        printer
+          .size(0.5, 0.5)
+          .drawLine()
+          .text("Fiesta Urban Cuisine")
+          .text("Negombo Road Kurunegala")
+          .text("0773121022");
+        printer.feed(2).cut(true).close();
       });
-      printer
-        .feed(2)
-        .style("B")
-        .size(1, 1)
-        .text(`TOTAL: ${formatNumberToCurrency(total)}`);
-      if (tendered) {
-        printer.text(`Tendered: ${formatNumberToCurrency(tendered)}`);
-      }
-      if (balance) {
-        printer.text(`TOTAL: ${formatNumberToCurrency(balance)}`);
-      }
-      printer
-        .size(0.5, 0.5)
-        .drawLine()
-        .text("Fiesta Urban Cuisine")
-        .text("Negombo Road Kurunegala")
-        .text("0773121022");
-      printer.feed(2).cut(true).close();
     });
-  });
+  } catch (error) {
+    console.log(error)
+   console.log("Error") 
+  }
 };
 
 module.exports.printKot = function printKot(
@@ -125,9 +130,9 @@ module.exports.printKot = function printKot(
 
 module.exports.printerInfo = function getPrinterInfo() {
   try {
-    return init();
+    return init()
   } catch (error) {
-    console.log(error)
+    console.log("error initializing printer")
     return error.message;
   }
 };
